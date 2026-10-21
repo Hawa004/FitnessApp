@@ -1,3 +1,4 @@
-document.getElementById("startBtn").addEventListener("click", function() {
-    alert("Welcome! Let's create your workout plan!");
+
+document.getElementById("startBtn").addEventListener("click", () => {
+    alert("Coming next: Your personalized workout planner!");
 });

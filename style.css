@@ -1,16 +1,226 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    background-color: #121212;
-    color: white;
+    background: #0b0e0c;
+    color: #ffffff;
     font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 50px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 8%;
+    border-bottom: 1px solid #252a26;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 900;
+    text-decoration: none;
+    color: white;
+}
+
+.logo span, .hero h1 span {
+    color: #a3ff47;
+}
+
+nav {
+    display: flex;
+    gap: 30px;
+}
+
+nav a {
+    color: #c5cbc5;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #a3ff47;
+}
+
+.hero {
+    min-height: 550px;
+    display: flex;
+    align-items: center;
+    padding: 80px 8%;
+    background: radial-gradient(
+        ellipse at 80% 50%,
+        #1c3420 0%,
+        #0b0e0c 65%
+    );
+}
+
+.hero-content {
+    max-width: 750px;
+}
+
+.eyebrow {
+    color: #a3ff47;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-size: clamp(42px, 6vw, 82px);
+    line-height: 1.1;
+    font-weight: 900;
+    margin-bottom: 25px;
+}
+
+.subtitle {
+    color: #aeb8af;
+    font-size: 18px;
+    line-height: 1.7;
+    max-width: 500px;
+    margin-bottom: 35px;
 }
 
 button {
-    background-color: #22c55e;
-    color: black;
-    padding: 15px 30px;
+    background: #a3ff47;
+    color: #0b0e0c;
+    padding: 17px 28px;
     border: none;
     border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #c0ff83;
+    transform: translateY(-2px);
+}
+
+.features {
+    padding: 80px 8%;
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 30px;
+    margin-bottom: 40px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.feature-card {
+    background: #161c17;
+    border: 1px solid #29352b;
+    border-radius: 14px;
+    padding: 35px 25px;
+    text-align: left;
+}
+
+.feature-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    color: #aeb8af;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    color: #7f8b80;
+    padding: 30px;
+    border-top: 1px solid #252a26;
+}
+
+@media (max-width: 700px) {
+    .navbar {
+        padding: 20px 5%;
+    }
+
+    .hero {
+        padding: 70px 5%;
+        min-height: 450px;
+    }
+
+    .features {
+        padding: 60px 5%;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        gap: 15px;
+    }
+}
+
+/* FitPlan AI - Pink & Black Theme */
+
+body {
+    background: #0b0b0f;
+    color: #ffffff;
+}
+
+.navbar {
+    background: #0b0b0f;
+    border-bottom: 1px solid #33202c;
+}
+
+.logo span,
+.hero h1 span,
+.eyebrow {
+    color: #ff2d8d;
+}
+
+nav a:hover {
+    color: #ff85b8;
+}
+
+.hero {
+    background: radial-gradient(
+        ellipse at 80% 50%,
+        #4a1734 0%,
+        #0b0b0f 65%
+    );
+}
+
+button {
+    background: #ff2d8d;
+    color: #ffffff;
+}
+
+button:hover {
+    background: #ff85b8;
+    transform: translateY(-2px);
+}
+
+.feature-card {
+    background: #1a1a22;
+    border: 1px solid #44253a;
+}
+
+.feature-card:hover {
+    border-color: #ff2d8d;
+}
+
+footer {
+    border-top: 1px solid #33202c;
 }

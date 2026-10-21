@@ -1,16 +1,62 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitPlan AI</title>
+    <title>REP+ | Your Personal Workout Planner</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Welcome to FitPlan AI</h1>
-    <p>Your personal workout planner</p>
+    <header class="navbar">
+        <a href="#" class="logo">REP<span>+</span></a>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+        </nav>
+    </header>
 
-    <button id="startBtn">Get Started</button>
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <p class="eyebrow">YOUR FITNESS. YOUR PLAN.</p>
+                <h1>BUILD YOUR<br><span>STRONGEST SELF.</span></h1>
+                <p class="subtitle">
+                    Get personalized workout plans based on
+                    your goals, experience, and schedule.
+                </p>
+                <button id="startBtn">Create My Workout Plan →</button>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <h2>Everything you need to get started</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Personalized Plans</h3>
+                    <p>Workouts tailored to your fitness goals.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🏋️</div>
+                    <h3>Workout Schedule</h3>
+                    <p>Know exactly what to train each day.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Track Progress</h3>
+                    <p>Stay consistent and monitor your workouts.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 REP+ | Every Rep Counts.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
