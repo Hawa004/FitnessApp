@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REP+ | Generator Tests</title>
+    <style>
+        body { background: #0b0b0f; color: #fff; font-family: Arial, sans-serif; padding: 30px; }
+        .pass { color: #6dff9b; }
+        .fail { color: #ff5a6e; font-weight: bold; }
+        #summary { font-size: 20px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>REP+ workout generator tests</h1>
+    <p id="summary"></p>
+    <ul id="results"></ul>
+
+    <script src="workouts.js"></script>
+    <script>
+        // Tests every combination of goal, level, days and location
+        const results = [];
+        function check(name, ok) { results.push({ name, ok }); }
+
+        const goals = ["muscle", "strength", "fitness"];
+        const levels = ["beginner", "intermediate", "advanced"];
+        const dayOptions = [2, 3, 4, 5, 6, 7];
+        const locations = ["gym", "home", "both"];
+        let combos = 0, problems = [];
+
+        for (const goal of goals) for (const level of levels) for (const days of dayOptions) for (const location of locations) {
+            combos++;
+            const label = `${goal}/${level}/${days}d/${location}`;
+            const plan = generatePlan({ goal, level, days, location });
+            const training = plan.week.filter(d => !d.rest);
+
+            if (plan.week.length !== 7) problems.push(label + ": week is not 7 days");
+            if (training.length !== days) problems.push(label + ": wrong number of training days");
+            for (const day of training) {
+                const names = day.exercises.map(e => e.name);
+                if (day.exercises.length < LEVEL_SETTINGS[level].exercises) problems.push(`${label} ${day.day}: too few exercises`);
+                if (new Set(names).size !== names.length) problems.push(`${label} ${day.day}: duplicate exercise`);
+                for (const ex of day.exercises) {
+                    const db = EXERCISES.find(e => e.name === ex.name);
+                    if (location !== "both" && db.where !== "any" && db.where !== location) problems.push(`${label}: ${ex.name} not available at ${location}`);
+                    if (db.level > LEVEL_SETTINGS[level].maxLevel) problems.push(`${label}: ${ex.name} is too hard for ${level}`);
+                    if (!(ex.sets >= 2)) problems.push(`${label}: ${ex.name} has ${ex.sets} sets`);
+                }
+            }
+        }
+        check(`All ${combos} combinations give a valid week (7 days, right number of training days, enough exercises, no duplicates, right location, not too hard for the level)`, problems.length === 0);
+        problems.slice(0, 20).forEach(p => check(p, false));
+
+        // Goal rules
+        const strength = generatePlan({ goal: "strength", level: "intermediate", days: 3, location: "gym" });
+        check("Strength goal uses heavy reps (4-6) and long rest", strength.week.find(d => !d.rest).exercises[0].reps === "4-6");
+
+        const fitness = generatePlan({ goal: "fitness", level: "beginner", days: 3, location: "home" });
+        check("Fitness goal ends each workout with cardio", fitness.week.filter(d => !d.rest).every(d => d.exercises.at(-1).muscle === "cardio"));
+
+        // Level rules
+        const beginner = generatePlan({ goal: "muscle", level: "beginner", days: 3, location: "gym" });
+        const advanced = generatePlan({ goal: "muscle", level: "advanced", days: 3, location: "gym" });
+        check("Advanced gets more exercises than beginner", advanced.week[0].exercises.length > beginner.week[0].exercises.length);
+        check("Advanced gets more sets than beginner", advanced.week[0].exercises[0].sets > beginner.week[0].exercises[0].sets);
+
+        const smallEx = strength.week.flatMap(d => d.exercises).find(e => SMALL_EXERCISES.includes(e.name));
+        check("Small exercises (like Lateral Raise) get higher reps than heavy lifts on the strength goal", smallEx && smallEx.reps === "8-12");
+
+        // Difficulty rules
+        const allNames = plan => plan.week.flatMap(d => d.exercises.map(e => e.name));
+        const beginnerGym = generatePlan({ goal: "strength", level: "beginner", days: 6, location: "gym" });
+        check("Beginner never gets hard exercises like Pull-ups or Bulgarian Split Squat", !allNames(beginnerGym).some(n => n === "Pull-ups" || n === "Bulgarian Split Squat"));
+        check("Beginner still gets basic lifts like Back Squat and Bench Press (with light weight)", ["Back Squat", "Bench Press"].every(n => allNames(beginnerGym).includes(n)));
+        check("Beginner plan includes a tip about light weight", beginnerGym.tip.includes("light weight"));
+        const advancedAll = [5, 6, 7].flatMap(d => allNames(generatePlan({ goal: "muscle", level: "advanced", days: d, location: "both" })));
+        check("Advanced users can get hard (level 3) exercises", advancedAll.some(n => EXERCISES.find(e => e.name === n).level === 3));
+
+        // Variation and rest days
+        const ppl = generatePlan({ goal: "muscle", level: "intermediate", days: 6, location: "gym" });
+        const pushDays = ppl.week.filter(d => d.title === "Push").map(d => d.exercises.map(e => e.name).join());
+        check("Two Push days in the same week are not identical", pushDays.length === 2 && pushDays[0] !== pushDays[1]);
+        const two = generatePlan({ goal: "muscle", level: "beginner", days: 2, location: "home" });
+        check("2-day plan has rest days between workouts", two.week[1].rest && two.week[2].rest);
+
+        // Swap exercise
+        const swapPlan = generatePlan({ goal: "muscle", level: "beginner", days: 3, location: "home" });
+        const before = swapPlan.week[0].exercises[0];
+        swapExercise(swapPlan, 0, 0);
+        const after = swapPlan.week[0].exercises[0];
+        const afterDb = EXERCISES.find(e => e.name === after.name);
+        check("Swap gives a different exercise for the same muscle", after.name !== before.name && after.muscle === before.muscle);
+        check("Swapped exercise still fits location and level", (afterDb.where === "home" || afterDb.where === "any") && afterDb.level <= 1);
+        const swapNames = swapPlan.week[0].exercises.map(e => e.name);
+        check("Swap never creates a duplicate in the same workout", new Set(swapNames).size === swapNames.length);
+
+        // 4-week progression
+        const prog = generatePlan({ goal: "muscle", level: "intermediate", days: 3, location: "gym" });
+        const baseSets = prog.week[0].exercises[0].sets;
+        check("Week 3 has more sets than week 1", getWeekSets(baseSets, 3) > getWeekSets(baseSets, 1));
+        check("Week 4 (recovery) has fewer sets than week 3, but at least 2", getWeekSets(baseSets, 4) < getWeekSets(baseSets, 3) && getWeekSets(2, 4) >= 2);
+        prog.currentWeek = 3;
+        check("Plan shows 4 week buttons and the chosen week", (renderPlan(prog).match(/week-btn/g) || []).length === 4 && renderPlan(prog).includes("Week 3: Hardest week"));
+
+        // Bad input
+        let threw = false;
+        try { generatePlan({ goal: "flying", level: "beginner", days: 3 }); } catch { threw = true; }
+        check("Invalid input gives an error instead of a broken plan", threw);
+
+        // Show results
+        const passed = results.filter(r => r.ok).length;
+        document.getElementById("summary").textContent = `${passed} / ${results.length} tests passed`;
+        document.getElementById("summary").className = passed === results.length ? "pass" : "fail";
+        document.getElementById("results").innerHTML = results
+            .map(r => `<li class="${r.ok ? "pass" : "fail"}">${r.ok ? "✔" : "✘"} ${r.name}</li>`).join("");
+    </script>
+</body>
+</html>
