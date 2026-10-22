@@ -5,6 +5,7 @@ document.getElementById("startBtn").addEventListener("click", () => {
 const startBtn = document.getElementById("startBtn");
 const workoutForm = document.getElementById("workoutForm");
 const formResult = document.getElementById("formResult");
+const location = document.getElementById("location").value;
 
 // Scroll to questionnaire
 startBtn.addEventListener("click", () => {
@@ -25,7 +26,8 @@ workoutForm.addEventListener("submit", (event) => {
     const preferences = {
         goal: goal,
         level: level,
-        days: Number(days)
+        days: Number(days), 
+        location: location
     };
 
     localStorage.setItem(
@@ -50,4 +52,6 @@ workoutForm.addEventListener("submit", (event) => {
         behavior: "smooth",
         block: "center"
     });
+    
+    
 });
