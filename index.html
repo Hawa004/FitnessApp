@@ -29,6 +29,55 @@
                 <button id="startBtn">Create My Workout Plan →</button>
             </div>
         </section>
+        
+        <section class="planner" id="planner">
+            <div class="planner-container">
+                <p class="eyebrow">REP+ / YOUR JOURNEY</p>
+                <h2>Build Your Plan</h2>
+                <p class="planner-subtitle">
+                    Tell us about yourself and your fitness goals.
+                </p>
+
+                <form id="workoutForm">
+                    <div class="form-group">
+                        <label for="goal">What's your fitness goal?</label>
+                        <select id="goal" name="goal" required>
+                            <option value="" disabled selected>Select your goal</option>
+                            <option value="muscle">Build Muscle</option>
+                            <option value="strength">Get Stronger</option>
+                            <option value="fitness">Improve Fitness</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="level">Your experience level</label>
+                        <select id="level" name="level" required>
+                            <option value="" disabled selected>Select your level</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="days">Training days per week</label>
+                        <select id="days" name="days" required>
+                            <option value="" disabled selected>Select days</option>
+                            <option value="2">2 Days</option>
+                            <option value="3">3 Days</option>
+                            <option value="4">4 Days</option>
+                            <option value="5">5 Days</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="generate-btn">
+                        Generate My Plan →
+                    </button>
+                </form>
+
+                <div id="formResult" class="form-result" aria-live="polite" hidden></div>
+            </div>
+        </section>
 
         <section class="features" id="features">
             <h2>Everything you need to get started</h2>

@@ -224,3 +224,84 @@ button:hover {
 footer {
     border-top: 1px solid #33202c;
 }
+
+
+/* Workout Questionnaire */
+
+.planner {
+    padding: 90px 20px;
+    background: #0b0b0f;
+}
+
+.planner-container {
+    max-width: 550px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #1a1a22;
+    border: 1px solid #44253a;
+    border-radius: 18px;
+}
+
+.planner h2 {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.planner-subtitle {
+    color: #aeb8af;
+    margin-bottom: 35px;
+    line-height: 1.6;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 15px;
+    background: #0b0b0f;
+    color: white;
+    border: 1px solid #44253a;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.form-group select:focus {
+    outline: 2px solid #ff2d8d;
+}
+
+.generate-btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.form-result {
+    margin-top: 25px;
+    padding: 20px;
+    background: #291726;
+    border: 1px solid #ff2d8d;
+    border-radius: 10px;
+    line-height: 1.8;
+}
+
+.form-result[hidden] {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .planner-container {
+        padding: 25px 20px;
+    }
+
+    .planner h2 {
+        font-size: 28px;
+    }
+}
