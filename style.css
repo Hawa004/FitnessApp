@@ -602,3 +602,146 @@ footer {
         font-size: 24px;
     }
 }
+
+/* REP+ Mobile Responsive Improvements */
+
+@media (max-width: 600px) {
+
+    /* Prevent horizontal scrolling */
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Navigation */
+    .navbar {
+        padding: 18px 5%;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .logo {
+        font-size: 23px;
+    }
+
+    nav {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+    /* Hero section */
+    .hero {
+        min-height: auto;
+        padding: 65px 5%;
+    }
+
+    .hero h1 {
+        font-size: clamp(34px, 9vw, 48px);
+        line-height: 1.15;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    /* Workout questionnaire */
+    .planner {
+        padding: 50px 12px;
+    }
+
+    .planner-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 22px 16px;
+    }
+
+    .planner h2 {
+        font-size: 27px;
+    }
+
+    .form-group select {
+        font-size: 16px;
+        max-width: 100%;
+    }
+
+    /* Workout results */
+    .form-result {
+        padding: 15px 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .day-card {
+        padding: 12px;
+        min-width: 0;
+    }
+
+    .day-card li {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .day-card li strong {
+        width: 100%;
+    }
+
+    .day-card li span {
+        margin-left: 0;
+        text-align: left;
+    }
+
+    /* Week navigation */
+    .week-tabs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .week-btn {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    /* Progress dashboard */
+    .progress-dashboard {
+        padding: 20px 14px;
+        margin: 20px 0;
+    }
+
+    .progress-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .progress-stat {
+        min-width: 0;
+        padding: 14px 10px;
+    }
+
+    .progress-stat strong {
+        font-size: 24px;
+    }
+
+    /* Buttons */
+    .generate-btn,
+    #startBtn {
+        width: 100%;
+        min-height: 48px;
+    }
+
+    .swap-btn {
+        min-height: 36px;
+        padding: 6px 12px;
+    }
+
+    /* Footer */
+    footer {
+        padding: 25px 15px;
+        font-size: 13px;
+    }
+}
+
