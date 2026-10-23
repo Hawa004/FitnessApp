@@ -1,3 +1,5 @@
+
+ // REP+ - Main application logic
 const startBtn = document.getElementById("startBtn");
 const workoutForm = document.getElementById("workoutForm");
 const formResult = document.getElementById("formResult");
@@ -9,21 +11,15 @@ startBtn.addEventListener("click", () => {
     });
 });
 
-// Handle questionnaire submission
+// Generate a new workout plan
 workoutForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const goal = document.getElementById("goal").value;
-    const level = document.getElementById("level").value;
-    const days = document.getElementById("days").value;
-    const location = document.getElementById("location").value;
-
-    // Save preferences for the workout generator
     const preferences = {
-        goal: goal,
-        level: level,
-        days: Number(days),
-        location: location
+        goal: document.getElementById("goal").value,
+        level: document.getElementById("level").value,
+        days: Number(document.getElementById("days").value),
+        location: document.getElementById("location").value
     };
 
     localStorage.setItem(
@@ -31,18 +27,15 @@ workoutForm.addEventListener("submit", (event) => {
         JSON.stringify(preferences)
     );
 
-    localStorage.setItem(
-        "repPlusPlan", JSON.stringify(plan));
-    resetProgress(); // a new plan starts with no completed workouts
-    
-    const swapButton = event.target.closest(".swap-btn");
-    const weekButton = event.target.closest(".week-btn");
-    const doneBox = event.target.closest(".done-check");
-    if (!swapButton && !weekButton && !doneBox) return;
-
-    // Generate and show the workout plan (workouts.js)
     const plan = generatePlan(preferences);
-    localStorage.setItem("repPlusPlan", JSON.stringify(plan));
+
+    // New plan starts with no completed workouts
+    resetProgress();
+
+    localStorage.setItem(
+        "repPlusPlan",
+        JSON.stringify(plan)
+    );
 
     formResult.hidden = false;
     formResult.innerHTML = renderPlan(plan);
@@ -53,24 +46,56 @@ workoutForm.addEventListener("submit", (event) => {
     });
 });
 
-// Swap an exercise (↻) or change week (Week 1-4) in the plan (workouts.js)
+// Swap exercises or switch weeks
 formResult.addEventListener("click", (event) => {
     const swapButton = event.target.closest(".swap-btn");
     const weekButton = event.target.closest(".week-btn");
+
     if (!swapButton && !weekButton) return;
 
-    const plan = JSON.parse(localStorage.getItem("repPlusPlan"));
+    const savedPlan = localStorage.getItem("repPlusPlan");
+    if (!savedPlan) return;
+
+    const plan = JSON.parse(savedPlan);
+
     if (swapButton) {
-        swapExercise(plan, Number(swapButton.dataset.day), Number(swapButton.dataset.exercise));
+        swapExercise(
+            plan,
+            Number(swapButton.dataset.day),
+            Number(swapButton.dataset.exercise)
+        );
     } else {
         plan.currentWeek = Number(weekButton.dataset.week);
     }
-    localStorage.setItem("repPlusPlan", JSON.stringify(plan));
+
+    localStorage.setItem(
+        "repPlusPlan",
+        JSON.stringify(plan)
+    );
+
     formResult.innerHTML = renderPlan(plan);
 });
 
-// Show the saved plan again after a page refresh
+// Mark workouts as completed
+formResult.addEventListener("change", (event) => {
+    if (!event.target.matches(".done-check")) return;
+
+    const savedPlan = localStorage.getItem("repPlusPlan");
+    if (!savedPlan) return;
+
+    const plan = JSON.parse(savedPlan);
+
+    toggleDone(
+        plan.currentWeek || 1,
+        Number(event.target.dataset.day)
+    );
+
+    formResult.innerHTML = renderPlan(plan);
+});
+
+// Restore saved workout plan after refreshing
 const savedPlan = localStorage.getItem("repPlusPlan");
+
 if (savedPlan) {
     formResult.hidden = false;
     formResult.innerHTML = renderPlan(JSON.parse(savedPlan));
