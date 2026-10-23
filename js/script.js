@@ -1,17 +1,18 @@
 
- // REP+ - Main application logic
+// REP+ Main Application
+
 const startBtn = document.getElementById("startBtn");
 const workoutForm = document.getElementById("workoutForm");
 const formResult = document.getElementById("formResult");
 
-// Scroll to questionnaire
+// Scroll to workout questionnaire
 startBtn.addEventListener("click", () => {
     document.getElementById("planner").scrollIntoView({
         behavior: "smooth"
     });
 });
 
-// Generate a new workout plan
+// Generate workout plan
 workoutForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -29,7 +30,6 @@ workoutForm.addEventListener("submit", (event) => {
 
     const plan = generatePlan(preferences);
 
-    // New plan starts with no completed workouts
     resetProgress();
 
     localStorage.setItem(
@@ -46,7 +46,7 @@ workoutForm.addEventListener("submit", (event) => {
     });
 });
 
-// Swap exercises or switch weeks
+// Handle exercise swaps and week navigation
 formResult.addEventListener("click", (event) => {
     const swapButton = event.target.closest(".swap-btn");
     const weekButton = event.target.closest(".week-btn");
@@ -64,7 +64,9 @@ formResult.addEventListener("click", (event) => {
             Number(swapButton.dataset.day),
             Number(swapButton.dataset.exercise)
         );
-    } else {
+    }
+
+    if (weekButton) {
         plan.currentWeek = Number(weekButton.dataset.week);
     }
 
@@ -93,7 +95,7 @@ formResult.addEventListener("change", (event) => {
     formResult.innerHTML = renderPlan(plan);
 });
 
-// Restore saved workout plan after refreshing
+// Restore saved plan
 const savedPlan = localStorage.getItem("repPlusPlan");
 
 if (savedPlan) {
