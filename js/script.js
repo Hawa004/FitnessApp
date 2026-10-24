@@ -38,8 +38,8 @@ workoutForm.addEventListener("submit", (event) => {
     );
 
     formResult.hidden = false;
-    formResult.innerHTML = renderPlan(plan);
-
+    formResult.innerHTML =
+    renderPlan(plan) + renderWorkoutHistory(plan);
     formResult.scrollIntoView({
         behavior: "smooth",
         block: "start"
@@ -75,7 +75,8 @@ formResult.addEventListener("click", (event) => {
         JSON.stringify(plan)
     );
 
-    formResult.innerHTML = renderPlan(plan);
+    formResult.innerHTML =
+    renderPlan(plan) + renderWorkoutHistory(plan);
 });
 
 // Mark workouts as completed
@@ -92,7 +93,8 @@ formResult.addEventListener("change", (event) => {
         Number(event.target.dataset.day)
     );
 
-    formResult.innerHTML = renderPlan(plan);
+    formResult.innerHTML =
+    renderPlan(plan) + renderWorkoutHistory(plan);
 });
 
 // Restore saved plan
@@ -100,5 +102,9 @@ const savedPlan = localStorage.getItem("repPlusPlan");
 
 if (savedPlan) {
     formResult.hidden = false;
-    formResult.innerHTML = renderPlan(JSON.parse(savedPlan));
+    const restoredPlan = JSON.parse(savedPlan);
+
+    formResult.innerHTML =
+        renderPlan(restoredPlan) +
+        renderWorkoutHistory(restoredPlan);
 }

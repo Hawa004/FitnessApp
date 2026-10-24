@@ -131,3 +131,60 @@ function renderProgress(plan, week) {
         </section>
     `;
 }
+
+// REP+ Workout History
+
+function renderWorkoutHistory(plan) {
+    const progress = loadProgress();
+    const completedWorkouts = [];
+
+    const totalWeeks = PROGRESSION.length;
+
+    for (let week = 1; week <= totalWeeks; week++) {
+        plan.week.forEach((day, dayIndex) => {
+            if (!day.rest && progress[week + "-" + dayIndex] === true) {
+                completedWorkouts.push({
+                    week: week,
+                    day: dayIndex + 1
+                });
+            }
+        });
+    }
+
+    if (completedWorkouts.length === 0) {
+        return `
+            <section class="workout-history">
+                <h3>Workout History</h3>
+                <p class="history-empty">
+                    No completed workouts yet.
+                    Finish your first workout to see it here!
+                </p>
+            </section>
+        `;
+    }
+
+    const historyItems = completedWorkouts.map(workout => `
+        <div class="history-item">
+            <div>
+                <strong>
+                    Week ${workout.week} – Day ${workout.day}
+                </strong>
+                <p>Workout completed</p>
+            </div>
+            <span class="history-check">✓ Done</span>
+        </div>
+    `).join("");
+
+    return `
+        <section class="workout-history">
+            <p class="history-eyebrow">REP+ / ACTIVITY</p>
+            <h3>Workout History</h3>
+            <p class="history-subtitle">
+                Your completed workout sessions
+            </p>
+            <div class="history-list">
+                ${historyItems}
+            </div>
+        </section>
+    `;
+}
