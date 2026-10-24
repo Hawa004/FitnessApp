@@ -827,3 +827,374 @@ footer {
     }
 }
 
+
+/* ===================================
+   REP+ WORKOUT CALENDAR
+=================================== */
+
+.workout-calendar {
+    background: #111116;
+    border: 1px solid #44253a;
+    border-radius: 18px;
+    padding: 28px;
+    margin: 25px 0;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Calendar heading */
+
+.calendar-eyebrow {
+    color: #ff2d8d;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.workout-calendar h3 {
+    color: #ffffff;
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.calendar-subtitle {
+    color: #b9b9c4;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* Month navigation */
+
+.calendar-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.calendar-navigation strong {
+    color: #ffffff;
+    font-size: 17px;
+    text-align: center;
+}
+
+.calendar-prev,
+.calendar-next {
+    background: #24242c;
+    color: #ff85b8;
+    border: 1px solid #44253a;
+    border-radius: 10px;
+    padding: 8px 14px;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.calendar-prev:hover,
+.calendar-next:hover {
+    background: #ff2d8d;
+    color: #ffffff;
+}
+
+/* Seven-column calendar */
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+}
+
+.calendar-weekday {
+    text-align: center;
+    color: #b9b9c4;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+/* Calendar dates */
+
+.calendar-day {
+    min-width: 0;
+    min-height: 52px;
+    background: #24242c;
+    border: 1px solid #38303b;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.calendar-empty {
+    min-width: 0;
+}
+
+/* Completed workout */
+
+.calendar-done {
+    background: #3b2838;
+    border-color: #ff2d8d;
+}
+
+.calendar-check {
+    color: #ff2d8d;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Legend */
+
+.calendar-legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    color: #b9b9c4;
+    font-size: 13px;
+}
+
+.calendar-legend-check {
+    color: #ff2d8d;
+    font-weight: bold;
+}
+
+/* Mobile responsiveness */
+
+@media (max-width: 600px) {
+
+    .workout-calendar {
+        padding: 20px 12px;
+    }
+
+    .workout-calendar h3 {
+        font-size: 22px;
+    }
+
+    .calendar-grid {
+        gap: 4px;
+    }
+
+    .calendar-day {
+        min-height: 42px;
+        font-size: 12px;
+        border-radius: 6px;
+    }
+
+    .calendar-weekday {
+        font-size: 10px;
+    }
+
+    .calendar-navigation strong {
+        font-size: 15px;
+    }
+
+    .calendar-prev,
+    .calendar-next {
+        padding: 6px 10px;
+    }
+
+    .calendar-check {
+        font-size: 13px;
+    }
+}
+
+/* REP+ Calendar Spacing Fix */
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
+.calendar-grid .calendar-day {
+    width: 100%;
+    min-width: 0;
+    min-height: 58px;
+
+    padding: 6px 2px;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+
+    font-size: 14px;
+    line-height: 1.2;
+    transform: none;
+}
+
+.calendar-grid .calendar-day:hover:not(:disabled) {
+    transform: none;
+    border-color: #ff2d8d;
+}
+
+.calendar-grid .calendar-day:disabled {
+    opacity: 1;
+    cursor: default;
+}
+
+.calendar-grid .calendar-empty {
+    min-width: 0;
+}
+
+/* Smaller screens */
+
+@media (max-width: 600px) {
+    .calendar-grid {
+        gap: 4px;
+    }
+
+    .calendar-grid .calendar-day {
+        min-height: 44px;
+        padding: 5px 1px;
+        font-size: 12px;
+    }
+}
+
+.calendar-grid .calendar-selected {
+    border: 2px solid #ff2d8d;
+    background: #3b2838;
+}
+
+
+/* ==========================================
+   REP+ PROGRAM START DATE
+========================================== */
+
+.start-date-group input,
+.start-date-setup input {
+    width: 100%;
+    padding: 15px;
+    background: #0b0b0f;
+    color: #ffffff;
+    border: 1px solid #44253a;
+    border-radius: 8px;
+    font-size: 15px;
+    color-scheme: dark;
+}
+
+.start-date-group input:focus,
+.start-date-setup input:focus {
+    outline: 2px solid #ff2d8d;
+}
+
+.start-date-help {
+    color: #b9b9c4;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 10px;
+}
+
+.start-date-setup {
+    background: #111116;
+    border: 1px solid #44253a;
+    border-radius: 18px;
+    padding: 28px;
+    margin: 20px 0;
+}
+
+.start-date-setup h3 {
+    color: #ffffff;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.start-date-setup p {
+    color: #b9b9c4;
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+.start-date-setup label {
+    display: block;
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.save-plan-start {
+    width: 100%;
+    margin-top: 18px;
+}
+
+/* Calendar start date information */
+
+.calendar-start-info {
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px solid #38303b;
+    color: #b9b9c4;
+    font-size: 13px;
+}
+
+.calendar-start-info strong {
+    color: #ff85b8;
+}
+
+/* Equal calendar columns */
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
+.calendar-grid .calendar-day {
+    width: 100%;
+    min-width: 0;
+    min-height: 58px;
+    padding: 6px 2px;
+    margin: 0;
+    transform: none;
+}
+
+@media (max-width: 600px) {
+    .calendar-grid {
+        gap: 4px;
+    }
+
+    .calendar-grid .calendar-day {
+        min-height: 44px;
+        padding: 5px 1px;
+        font-size: 12px;
+    }
+
+    .start-date-setup {
+        padding: 20px 15px;
+    }
+}
+
+
+/* REP+ Actual Workout Dates */
+
+.workout-date {
+    color: #b9b9c4;
+    font-size: 13px;
+    margin-top: 6px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.day-card h3 {
+    color: #ff2d8d;
+}
+
+.day-card.completed {
+    border-color: #ff2d8d;
+}
+
+

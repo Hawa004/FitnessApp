@@ -254,31 +254,175 @@ function getWeekSets(sets, week) {
     return Math.max(2, sets + PROGRESSION[week - 1].extraSets);
 }
  
-// Turn a plan into HTML 
+
+// ==========================================
+// REP+ WORKOUT PLAN DISPLAY
+// Dynamic weekdays based on program start
+// ==========================================
+
+// Get the actual date and weekday of a workout
+function getWorkoutDisplayDate(plan, week, dayIndex) {
+    const dateString = getScheduledWorkoutDate(
+        plan,
+        week,
+        dayIndex
+    );
+
+    if (!dateString) {
+        return {
+            weekday: plan.week[dayIndex].day,
+            date: ""
+        };
+    }
+
+    const date = parseLocalDate(dateString);
+
+    if (!date) {
+        return {
+            weekday: plan.week[dayIndex].day,
+            date: ""
+        };
+    }
+
+    return {
+        weekday: date.toLocaleDateString("en-GB", {
+            weekday: "long"
+        }),
+
+        date: date.toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        })
+    };
+}
+
+// Render the complete workout plan
 function renderPlan(plan) {
     const week = plan.currentWeek || 1;
-    const weekButtons = PROGRESSION.map((_, i) =>
-        `<button class="week-btn${i + 1 === week ? " active" : ""}" data-week="${i + 1}">Week ${i + 1}</button>`
-    ).join("");
- 
+
+    // Week navigation buttons
+    const weekButtons = PROGRESSION.map((_, i) => `
+        <button
+            type="button"
+            class="week-btn${i + 1 === week ? " active" : ""}"
+            data-week="${i + 1}">
+            Week ${i + 1}
+        </button>
+    `).join("");
+
+    // Generate workout and rest-day cards
     const cards = plan.week.map((day, dayIndex) => {
+
+        // Calculate the actual scheduled date
+        const displayDate = getWorkoutDisplayDate(
+            plan,
+            week,
+            dayIndex
+        );
+
+        const dayHeading = `
+            <h3>${displayDate.weekday}</h3>
+            ${displayDate.date
+                ? `<p class="workout-date">
+                    ${displayDate.date}
+                   </p>`
+                : ""}
+        `;
+
+        // Rest days
         if (day.rest) {
-            return `<div class="day-card rest"><h3>${day.day}</h3><p>Rest Day 😴</p></div>`;
+            return `
+                <div class="day-card rest">
+                    ${dayHeading}
+                    <p>Rest Day 😴</p>
+                </div>
+            `;
         }
-        const rows = day.exercises.map((ex, exIndex) =>
-            `<li><strong>${ex.name}</strong><span>${getWeekSets(ex.sets, week)} × ${ex.reps} · rest ${ex.rest}</span>` +
-            `<button class="swap-btn" data-day="${dayIndex}" data-exercise="${exIndex}" title="Swap exercise">↻</button></li>`
+
+        // Exercises
+        const rows = day.exercises.map(
+            (ex, exIndex) => `
+                <li>
+                    <strong>${ex.name}</strong>
+
+                    <span>
+                        ${getWeekSets(ex.sets, week)}
+                        × ${ex.reps}
+                        · rest ${ex.rest}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="swap-btn"
+                        data-day="${dayIndex}"
+                        data-exercise="${exIndex}"
+                        title="Swap exercise">
+                        ↻
+                    </button>
+                </li>
+            `
         ).join("");
-        const checked = isDone(week, dayIndex) ? "checked" : "";
-        const doneBox = `<label class="done-label"><input type="checkbox" class="done-check" data-day="${dayIndex}" ${checked}> Done</label>`;
-        return `<div class="day-card${checked ? " completed" : ""}"><h3>${day.day}</h3><p class="day-title">${day.title}</p><ul>${rows}</ul>${doneBox}</div>`;    
+
+        // Completed workout checkbox
+        const checked = isDone(week, dayIndex)
+            ? "checked"
+            : "";
+
+        const doneBox = `
+            <label class="done-label">
+                <input
+                    type="checkbox"
+                    class="done-check"
+                    data-day="${dayIndex}"
+                    ${checked}>
+                Done
+            </label>
+        `;
+
+        return `
+            <div class="day-card${checked
+                ? " completed"
+                : ""}">
+
+                ${dayHeading}
+
+                <p class="day-title">
+                    ${day.title}
+                </p>
+
+                <ul>
+                    ${rows}
+                </ul>
+
+                ${doneBox}
+            </div>
+        `;
     }).join("");
- 
-    return `<h3 class="plan-heading">Your ${plan.days}-day plan: ${plan.goalLabel} (${plan.level})</h3>` +
-            `<p class="plan-tip">💡 ${plan.tip || ""}</p>` +
-           renderProgress(plan, week) +
-           `<div class="week-tabs">${weekButtons}</div>` +
-           `<p class="week-note">${PROGRESSION[week - 1].note}</p>` +
-           `<div class="plan-grid">${cards}</div>`;
-    
+
+    // Full plan HTML
+    return `
+        <h3 class="plan-heading">
+            Your ${plan.days}-day plan:
+            ${plan.goalLabel} (${plan.level})
+        </h3>
+
+        <p class="plan-tip">
+            💡 ${plan.tip || ""}
+        </p>
+
+        ${renderProgress(plan, week)}
+
+        <div class="week-tabs">
+            ${weekButtons}
+        </div>
+
+        <p class="week-note">
+            ${PROGRESSION[week - 1].note}
+        </p>
+
+        <div class="plan-grid">
+            ${cards}
+        </div>
+    `;
 }
