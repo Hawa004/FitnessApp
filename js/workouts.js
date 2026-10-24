@@ -364,20 +364,34 @@ function renderPlan(plan) {
             `
         ).join("");
 
-        // Completed workout checkbox
+       const scheduledDate = getScheduledWorkoutDate(
+    plan,
+    week,
+    dayIndex
+);
+
+        const today = getLocalDate();
+
+        const isFutureWorkout = scheduledDate > today;
+
         const checked = isDone(week, dayIndex)
             ? "checked"
             : "";
 
+        const disabled = isFutureWorkout
+            ? "disabled"
+            : "";
+
         const doneBox = `
-            <label class="done-label">
-                <input
-                    type="checkbox"
-                    class="done-check"
-                    data-day="${dayIndex}"
-                    ${checked}>
-                Done
-            </label>
+        <label class="done-label">
+            <input
+            type="checkbox"
+            class="done-check"
+            data-day="${dayIndex}"
+            ${checked}
+            ${disabled}>
+            ${isFutureWorkout ? "Upcoming 🔒" : "Done"}
+        </label>
         `;
 
         return `
