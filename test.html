@@ -16,7 +16,8 @@
     <p id="summary"></p>
     <ul id="results"></ul>
 
-    <script src="workouts.js"></script>
+    <script src="js/workouts.js"></script> 
+    <script src="js/progress.js"></script> 
     <script>
         // Tests every combination of goal, level, days and location
         const results = [];
@@ -101,6 +102,16 @@
         check("Week 4 (recovery) has fewer sets than week 3, but at least 2", getWeekSets(baseSets, 4) < getWeekSets(baseSets, 3) && getWeekSets(2, 4) >= 2);
         prog.currentWeek = 3;
         check("Plan shows 4 week buttons and the chosen week", (renderPlan(prog).match(/week-btn/g) || []).length === 4 && renderPlan(prog).includes("Week 3: Hardest week"));
+       
+        // Progress tracking (js/progress.js)
+        const savedProgress = localStorage.getItem(PROGRESS_KEY);
+        resetProgress();
+        toggleDone(1, 0);
+        check("Marking a workout as done saves it", isDone(1, 0) && !isDone(2, 0));
+        check("Done workouts show up in the progress dashboard", renderProgress(prog, 1).replace(/\s+/g, " ").includes("Week 1: 1 of 3 workouts completed"));
+        toggleDone(1, 0);
+        check("Clicking Done again removes the workout", !isDone(1, 0));
+        if (savedProgress) localStorage.setItem(PROGRESS_KEY, savedProgress); else resetProgress();
 
         // Bad input
         let threw = false;
