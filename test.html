@@ -113,6 +113,24 @@
         check("Clicking Done again removes the workout", !isDone(1, 0));
         if (savedProgress) localStorage.setItem(PROGRESS_KEY, savedProgress); else resetProgress();
 
+                // Exercise tips and workout time
+        check("Every exercise has a technique tip", EXERCISES.every(e => EXERCISE_TIPS[e.name]));
+        const timePlan = generatePlan({ goal: "strength", level: "advanced", days: 3, location: "gym" });
+        const quickPlan = generatePlan({ goal: "fitness", level: "beginner", days: 3, location: "home" });
+        const strongTime = estimateWorkoutMinutes(timePlan.week[0], 1);
+        const quickTime = estimateWorkoutMinutes(quickPlan.week[0], 1);
+        check("Workout time is realistic (20-120 min) and divisible by 5", [strongTime, quickTime].every(t => t >= 20 && t <= 120 && t % 5 === 0));
+        const strengthEx = timePlan.week.flatMap(d => d.exercises);
+        check("Small exercises get max 3 sets, heavy lifts keep 4+ sets on strength", strengthEx.filter(e => SMALL_EXERCISES.includes(e.name)).every(e => e.sets <= 3) && strengthEx.some(e => !SMALL_EXERCISES.includes(e.name) && e.sets >= 4));
+        check("Heavy strength workouts take longer than beginner fitness workouts", strongTime > quickTime);
+
+        // Training guidelines (ACSM)
+        const beginnerStrength = generatePlan({ goal: "strength", level: "beginner", days: 3, location: "gym" });
+        const bigLift = ex => !SMALL_EXERCISES.includes(ex.name) && ex.muscle !== "cardio";
+        check("Beginners on the strength goal learn with 8-12 reps, not heavy 4-6", beginnerStrength.week.flatMap(d => d.exercises).filter(bigLift).every(e => e.reps === "8-12"));
+        check("Small exercises get shorter rest (60-90 sec) than heavy lifts on strength", strengthEx.filter(e => SMALL_EXERCISES.includes(e.name)).every(e => e.rest === "60-90 sec") && strengthEx.filter(bigLift).every(e => e.rest === "2-3 min"));
+        check("Beginners never get more than 3 sets per exercise", beginnerStrength.week.flatMap(d => d.exercises).every(e => e.sets <= 3));
+       
         // Bad input
         let threw = false;
         try { generatePlan({ goal: "flying", level: "beginner", days: 3 }); } catch { threw = true; }
