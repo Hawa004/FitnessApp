@@ -1198,3 +1198,43 @@ footer {
 }
 
 
+/* Exercise tips and workout time */
+
+.exercise-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.exercise-info summary {
+    cursor: pointer;
+    list-style: none;
+}
+
+.exercise-info summary::-webkit-details-marker {
+    display: none;
+}
+
+.exercise-info summary strong::after {
+    content: " ⓘ";
+    color: #ff85b8;
+    font-weight: normal;
+}
+
+.exercise-info p {
+    margin-top: 6px;
+    color: #aeb8af;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.workout-time {
+    color: #ff85b8;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+@media (max-width: 600px) {
+    .exercise-info {
+        flex-basis: 100%;
+    }
+}
